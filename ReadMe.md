@@ -145,8 +145,8 @@ public class MySettings : RegistrySettings
     [EncryptedSetting]
     public string Password { get; set; }
 
-    // The following property will not be saved to file
-    // Non-public properties are also not saved to file
+    // The following property will not be saved to the registry
+    // Non-public properties are also not saved to the registry
     [ExcludedSetting]
     public DateTime Created { get; set; }
 
@@ -168,7 +168,7 @@ public class MySettings : RegistrySettings
 
 The `Settings` class is the base class for the `IniSettings`, `XmlSettings` and `RegistrySettings` classes. You don't need this class but you could use it to create your own type of custom settings class.
 
-To do this, create your own `static` class that derives from `Settings` and override the virtual `OnSaveSettings()` and `OnLoadSettings()` methods.
+To do this, create your own `static`, `abstract` class that derives from `Settings` and override the virtual `OnSaveSettings()` and `OnLoadSettings()` methods.
 
 As the name suggests, `OnSaveSettings()` is called when the settings are being saved. This method is passed a collection of `Setting` objects. Your handler needs to write these settings to your custom data store. The `Setting.Name` property contains the setting name. Use the `Setting.GetValue()` method to get the value. Or use the `Setting.GetValueAsString()` instead if your data store only supports string values.
 
