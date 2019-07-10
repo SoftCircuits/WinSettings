@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageId>SoftCircuits.WinSettings</PackageId>
+    <Authors>Jonathan Wood</Authors>
+    <Company>SoftCircuits</Company>
+    <Description>WinSettings is a .NET class library that makes it easy to save and retrieve application settings on Windows. It includes three settings classes: IniSettings, which stores the settings to an INI file; XmlSettings, which stores the settings to an XML file, and RegistrySettings, which stores the settings to the Windows registry. In addition, it makes it easy to define your own settings type.
+
+Settings can be encrypted just by adding a property attribute. There is also an attribute to exclude a particular property when the property is used internally and does not represent an application setting.
+
+To use a settings class, simply derive your own settings class from one of the ones described above and add public properties that you want to be saved. Your class' constructor should set any default values. Then call the Save() and Load() methods to save the settings in your class.</Description>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/SoftCircuits/WinSettings</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SoftCircuits/WinSettings</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>settings ini xml registry application-settings ini-settings xml-settings registry-settings ini-parser</PackageTags>
+    <PackageReleaseNotes>Initial version</PackageReleaseNotes>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
+    <PackageReference Include="SoftCircuits.EasyEncryption" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageId>SoftCircuits.IniSettings</PackageId>
+    <Authors>Jonathan Wood</Authors>
+    <Company>SoftCircuits</Company>
+    <Copyright>Copyright © 2019 SoftCircuits</Copyright>
+    <PackageProjectUrl>https://github.com/SoftCircuits/IniSettings</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SoftCircuits/IniSettings</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ini ini-file settings ini-parser</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
