@@ -22,7 +22,7 @@ To use the class, simply derive your own settings class from `IniSettings` and a
 
 Your derived class' constructor should initialize your settings properties to their default values.
 
-Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid `Encryption` object to the `IniSettings` constructor.
+Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved. When using this attribute on any property, you must provide a valid `Encryption` object to the `IniSettings` constructor.
 
 The second is the `ExcludedSettingAttribute`. Use this attribute on any properties that are used internally by your code and should not saved to file.
 
@@ -72,9 +72,9 @@ To use the class, simply derive your own settings class from `XmlSettings` and a
 
 Your derived class' constructor should initialize your settings properties to their default values.
 
-Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid `Encryption object to the `XmlSettings` constructor.
+Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid `Encryption` object to the `XmlSettings` constructor.
 
-`The second is the `ExcludedSettingAttribute`. Use this attribute on any properties that are used internally by your code and should not saved to file.
+The second is the `ExcludedSettingAttribute`. Use this attribute on any properties that are used internally by your code and should not saved to file.
 
 Note that only properties with data types supported by the `Encryption` class are supported by `XmlSettings`. This includes all the basic data types as well as `string[]` and `byte[]`. All other types will raise an exception.
 
@@ -130,12 +130,12 @@ Note that only properties with data types supported by the `Encryption class are
 
 #### Example
 
-The following example creates a settings class called `MySettings` with several properties, two of which are encrypted when saved to file.
+The following example creates a settings class called `MySettings` with several properties, two of which are encrypted when saved to the registry.
 
 ```cs
 public class MySettings : RegistrySettings
 {
-    // Define properties to be saved to file
+    // Define properties to be saved to the registry
     public string EmailHost { get; set; }
     public int EmailPort { get; set; }
 
