@@ -26,7 +26,7 @@ Two attributes are available for public properties in your derived class. The fi
 
 The second is the `ExcludedSettingAttribute`. Use this attribute on any properties that are used internally by your code and should not saved to file.
 
-All properties without the `ExcludedSettingAttribute` attribute must be of one of the supported data types. This includes all the basic data types as well as `string[]` and `byte[]`. All other types will raise an exception. In addition, INI files do not support strings that contain newlines unless those strings are encrypted.
+All public properties without the `ExcludedSettingAttribute` attribute must be of one of the supported data types. This includes all the basic data types as well as `string[]` and `byte[]`. All other types will raise an exception. In addition, INI files do not support strings that contain newlines unless those strings are encrypted.
 
 #### Example
 
@@ -76,7 +76,7 @@ Two attributes are available for public properties in your derived class. The fi
 
 The second is the `ExcludedSettingAttribute` Use this attribute on any properties that are used internally by your code and should not saved to file.
 
-All properties without the `ExcludedSettingAttribute` attribute must be of one of the supported data types. This includes all the basic data types `string[]` and `byte[]`. All other types will raise an exception.
+All public properties without the `ExcludedSettingAttribute` attribute must be of one of the supported data types. This includes all the basic data types `string[]` and `byte[]`. All other types will raise an exception.
 
 #### Example
 
@@ -118,24 +118,25 @@ public class MySettings : XmlSettings
 
 The `RegistrySettings` class makes it very easy to save your application settings to the system registry.
 
-To use the class, simply derive your own settings class from `RegistrySettings` and add the public properties that you want to be saved as settings. You can then call the `Settings.Load()` and `Settings.Save()` methods to read or write those settings to the system registry.
+To use the class, simply derive your own settings class from `RegistrySettings` and add the public properties that you want to be
+saved as settings. You can then call the `Load()` and `Save()` methods to read or write those settings to the system registry.
 
 Your derived class' constructor should initialize your settings properties to their default values.
 
-Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid `Encryption` object to the `RegistrySettings` constructor.
+Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid encryption password to the `RegistrySettings` constructor.
 
 The second is the `ExcludedSettingAttribute`. Use this attribute on any properties that are used internally by your code and should not saved to the registry.
 
-Note that only properties with data types supported by the `Encryption class are supported by `RegistrySettings`. This includes all the basic data types as well as `string[]` and `byte[]`. All other types will raise an exception.
+All public properties without the `ExcludedSettingAttribute` attribute must be of one of the supported data types. This includes all the basic data types as well as `string[]` and `byte[]`. All other types will raise an exception.
 
 #### Example
 
-The following example creates a settings class called `MySettings` with several properties, two of which are encrypted when saved to the registry.
+The following example creates a settings class called `MySettings` with several properties, two of which are encrypted when saved to file.
 
 ```cs
 public class MySettings : RegistrySettings
 {
-    // Define properties to be saved to the registry
+    // Define properties to be saved to file
     public string EmailHost { get; set; }
     public int EmailPort { get; set; }
 
@@ -145,13 +146,13 @@ public class MySettings : RegistrySettings
     [EncryptedSetting]
     public string Password { get; set; }
 
-    // The following property will not be saved to the registry
-    // Non-public properties are also not saved to the registry
+    // The following property will not be saved to file
+    // Non-public properties are also not saved to file
     [ExcludedSetting]
     public DateTime Created { get; set; }
 
     public MySettings(string companyName, string applicationName, RegistrySettingsType settingsType)
-        : base(companyName, applicationName, settingsType, new Encryption("Password", EncryptionAlgorithm.Aes))
+        : base(companyName, applicationName, settingsType, "Password123")
     {
         // Set initial, default property values
         EmailHost = string.Empty;
