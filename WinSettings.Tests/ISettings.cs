@@ -1,11 +1,11 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
 
 namespace WinSettingsTests
 {
-    interface ISettingsCommon
+    interface ISettings
     {
         void Save();
         void Load();
@@ -27,6 +27,6 @@ namespace WinSettingsTests
         DateTime DateTimeValue { get; set; }
         Byte[] ByteArrayValue { get; set; }
         String[] StringArrayValue { get; set; }
-        Func<string> UnsupportedSettingValue { get; set; }
+        String ExcludedStringValue { get; set; }
     }
 }

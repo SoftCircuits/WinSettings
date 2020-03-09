@@ -1,16 +1,15 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
-using SoftCircuits.EasyEncryption;
 using SoftCircuits.WinSettings;
 using System;
 
 namespace WinSettingsTests
 {
-    public class MyEncryptedRegistrySettings : RegistrySettings, ISettingsCommon
+    public class MyEncryptedXmlSettings : XmlSettings, ISettings
     {
-        public MyEncryptedRegistrySettings(EncryptionAlgorithm algorithm)
-            : base("SoftCircuits", "WinSettingsTestsEncrypted", RegistrySettingsType.CurrentUser, new Encryption("toxic-test", algorithm))
+        public MyEncryptedXmlSettings(string filePath)
+            : base(filePath, "Password123")
         {
         }
 
@@ -49,6 +48,6 @@ namespace WinSettingsTests
         [EncryptedSetting]
         public String[] StringArrayValue { get; set; }
         [ExcludedSetting]
-        public Func<string> UnsupportedSettingValue { get; set; }
+        public String ExcludedStringValue { get; set; }
     }
 }

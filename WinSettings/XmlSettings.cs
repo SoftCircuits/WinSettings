@@ -1,7 +1,6 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
-using SoftCircuits.EasyEncryption;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +28,7 @@ namespace SoftCircuits.WinSettings
     /// Two attributes are available for public properties in your derived class. The
     /// first is <see cref="EncryptedSettingAttribute" />. Use this attribute if you
     /// want the setting to be encrypted when saved to file. When using this attribute on
-    /// any property, you must provide a valid <see cref="Encryption"/> object to the
+    /// any property, you must provide a valid encryption password to the
     /// <see cref="XmlSettings" /> constructor.
     /// </para>
     /// <para>
@@ -38,10 +37,10 @@ namespace SoftCircuits.WinSettings
     /// file.
     /// </para>
     /// <para>
-    /// Note that only properties with data types supported by the
-    /// <see cref="Encryption"/> class are supported by <see cref="XmlSettings"/>.
-    /// This includes all the basic data types as well as <c>string[]</c> and
-    /// <c>byte[]</c>. All other types will raise an exception.
+    /// All public properties without the <see cref="ExcludedSettingAttribute"></see>
+    /// attribute must be of one of the supported data types. This includes all the basic
+    /// data types as well as <see cref="string[]"></see> and <see cref="byte[]"></see>.
+    /// All other types will raise an exception.
     /// </para>
     /// </remarks>
     /// <example>
@@ -66,7 +65,7 @@ namespace SoftCircuits.WinSettings
     ///     public DateTime Created { get; set; }
     /// 
     ///     public MySettings(string filename)
-    ///         : base(filename, new Encryption("Password", EncryptionAlgorithm.Aes))
+    ///         : base(filename, "Password123")
     ///     {
     ///         // Set initial, default property values
     ///         EmailHost = string.Empty;
@@ -90,17 +89,17 @@ namespace SoftCircuits.WinSettings
         public string FileName { get; set; }
 
         /// <summary>
-        /// Constructs an instance of the <c>XmlSettings</c> class.
+        /// Constructs an instance of the <see cref="XmlSettings"></see> class.
         /// </summary>
         /// <param name="filename">Name of the settings file.</param>
-        /// <param name="encryption"><see cref="Encryption" /> instance used for encrypted settings.
-        /// May be <c>null</c> if no settings use the <see cref="EncryptedSettingAttribute" />
+        /// <param name="password">Encryption password. May be <c>null</c> if
+        /// no settings use the <see cref="EncryptedSettingAttribute" />
         /// attribute.</param>
-        public XmlSettings(string filename, Encryption encryption)
-            : base(encryption)
+        public XmlSettings(string filename, string password = null)
+            : base(password)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentException("A valid path and file name is required.", nameof(filename));
+                throw new ArgumentException("A valid file name is required.", nameof(filename));
             FileName = filename;
         }
 
@@ -108,7 +107,7 @@ namespace SoftCircuits.WinSettings
         /// Performs internal load operations.
         /// </summary>
         /// <param name="settings">Settings to be loaded.</param>
-        protected override void OnLoadSettings(IEnumerable<Setting> settings)
+        public override void OnLoadSettings(IEnumerable<Setting> settings)
         {
             if (File.Exists(FileName))
             {
@@ -129,7 +128,7 @@ namespace SoftCircuits.WinSettings
         /// Performs internal save operations.
         /// </summary>
         /// <param name="settings">Settings to be saved.</param>
-        protected override void OnSaveSettings(IEnumerable<Setting> settings)
+        public override void OnSaveSettings(IEnumerable<Setting> settings)
         {
             // Create settings document
             XmlDocument doc = new XmlDocument();

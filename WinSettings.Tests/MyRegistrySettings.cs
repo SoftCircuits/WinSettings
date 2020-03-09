@@ -1,16 +1,15 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
-using SoftCircuits.EasyEncryption;
 using SoftCircuits.WinSettings;
 using System;
 
 namespace WinSettingsTests
 {
-    public class MyIniSettings : IniSettings, ISettingsCommon
+    public class MyRegistrySettings : RegistrySettings, ISettings
     {
-        public MyIniSettings(string filePath, EncryptionAlgorithm algorithm)
-            : base(filePath, new Encryption("toxic-test", algorithm))
+        public MyRegistrySettings()
+            : base("SoftCircuits", "WinSettingsTests", RegistrySettingsType.CurrentUser)
         {
         }
 
@@ -32,6 +31,6 @@ namespace WinSettingsTests
         public Byte[] ByteArrayValue { get; set; }
         public String[] StringArrayValue { get; set; }
         [ExcludedSetting]
-        public Func<string> UnsupportedSettingValue { get; set; }
+        public String ExcludedStringValue { get; set; }
     }
 }

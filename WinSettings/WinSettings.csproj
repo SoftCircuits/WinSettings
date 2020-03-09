@@ -7,27 +7,31 @@
     <PackageId>SoftCircuits.WinSettings</PackageId>
     <Authors>Jonathan Wood</Authors>
     <Company>SoftCircuits</Company>
-    <Description>WinSettings is a .NET class library that makes it easy to save and retrieve application settings on Windows. It includes three settings classes: IniSettings, which stores the settings to an INI file; XmlSettings, which stores the settings to an XML file, and RegistrySettings, which stores the settings to the Windows registry. In addition, it makes it easy to define your own settings type.
-
-Settings can be encrypted just by adding a property attribute. There is also an attribute to exclude a particular property when the property is used internally and does not represent an application setting.
-
-To use a settings class, simply derive your own settings class from one of the ones described above and add public properties that you want to be saved. Your class' constructor should set any default values. Then call the Save() and Load() methods to save the settings in your class.</Description>
+    <Description>.NET class library that makes it easy to save your application settings in Windows. Just create your settings class and have it derive from RegistrySettings (saves settings to the system registry), XmlSettings (saves settings to an XML file) or IniSettings (saves settings to an INI file). Just call the Save() method to save the class properties. Use the Load() method to load them. Use the [EncryptedSetting] attribute to specify a property should be stored encrypted. Use the [ExcludeSetting] to specify a property does not represent an application setting.</Description>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/SoftCircuits/WinSettings</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SoftCircuits/WinSettings</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>settings ini xml registry application-settings ini-settings xml-settings registry-settings ini-parser</PackageTags>
-    <PackageReleaseNotes>Initial version</PackageReleaseNotes>
+    <PackageReleaseNotes>BREAKING CHANGES: Constructors for settings classes modified to now take an optional encryption password; All references to SoftCircuits.EasyEncryption now kept internal within SoftCircuits.WinSettings; Reworked unit tests; Added package icon.</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <Version>2.0.0</Version>
+    <Copyright>Copyright © 2019-2020 SoftCircuits</Copyright>
+    <PackageIcon>Logo_64x64.png</PackageIcon>
+    <PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
-    <PackageReference Include="SoftCircuits.EasyEncryption" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    <PackageReference Include="SoftCircuits.EasyEncryption" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\Logo_64x64.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

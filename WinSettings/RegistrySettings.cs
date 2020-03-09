@@ -1,8 +1,7 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using Microsoft.Win32;
-using SoftCircuits.EasyEncryption;
 using System.Collections.Generic;
 
 namespace SoftCircuits.WinSettings
@@ -46,7 +45,7 @@ namespace SoftCircuits.WinSettings
     /// Two attributes are available for public properties in your derived class. The
     /// first is <see cref="EncryptedSettingAttribute" />. Use this attribute if you
     /// want the setting to be encrypted when saved to file. When using this attribute on
-    /// any property, you must provide a valid <see cref="Encryption"/> object to the
+    /// any property, you must provide a valid encryption password to the
     /// <see cref="RegistrySettings" /> constructor.
     /// </para>
     /// <para>
@@ -55,10 +54,10 @@ namespace SoftCircuits.WinSettings
     /// the registry.
     /// </para>
     /// <para>
-    /// Note that only properties with data types supported by the
-    /// <see cref="Encryption"/> class are supported by <see cref="RegistrySettings"/>.
-    /// This includes all the basic data types as well as <c>string[]</c> and
-    /// <c>byte[]</c>. All other types will raise an exception.
+    /// All public properties without the <see cref="ExcludedSettingAttribute"></see>
+    /// attribute must be of one of the supported data types. This includes all the basic
+    /// data types as well as <see cref="string[]"></see> and <see cref="byte[]"></see>.
+    /// All other types will raise an exception.
     /// </para>
     /// </remarks>
     /// <example>
@@ -83,7 +82,7 @@ namespace SoftCircuits.WinSettings
     ///     public DateTime Created { get; set; }
     /// 
     ///     public MySettings(string companyName, string applicationName, RegistrySettingsType settingsType)
-    ///         : base(companyName, applicationName, settingsType, new Encryption("Password", EncryptionAlgorithm.Aes))
+    ///         : base(companyName, applicationName, settingsType, "Password123")
     ///     {
     ///         // Set initial, default property values
     ///         EmailHost = string.Empty;
@@ -100,8 +99,8 @@ namespace SoftCircuits.WinSettings
     /// <seealso cref="XmlSettings"/>
     public abstract class RegistrySettings : Settings
     {
-        private string SubKeyPath;
-        private RegistryKey RegistryKey;
+        private readonly string SubKeyPath;
+        private readonly RegistryKey RegistryKey;
 
         /// <summary>
         /// Constructs a new <c>RegistrySettings</c> instance.
@@ -109,10 +108,10 @@ namespace SoftCircuits.WinSettings
         /// <param name="companyName">Company name entry in registry.</param>
         /// <param name="applicationName">Application name entry in registration.</param>
         /// <param name="settingsType">Section to store entries in registry.</param>
-        /// <param name="encryption"><see cref="Encryption" /> instance used for encrypted settings. May be <c>null</c>
-        /// if no settings use the <see cref="EncryptedSettingAttribute" /> attribute.</param>
-        public RegistrySettings(string companyName, string applicationName, RegistrySettingsType settingsType, Encryption encryption)
-            : base(encryption)
+        /// <param name="password">Encryption password. May be <c>null</c> if no settings
+        /// use the <see cref="EncryptedSettingAttribute" /> attribute.</param>
+        public RegistrySettings(string companyName, string applicationName, RegistrySettingsType settingsType, string password = null)
+            : base(password)
         {
             SubKeyPath = string.Format("Software\\{0}\\{1}", companyName, applicationName);
             RegistryKey = (settingsType == RegistrySettingsType.CurrentUser) ? Registry.CurrentUser : Registry.LocalMachine;
@@ -122,7 +121,7 @@ namespace SoftCircuits.WinSettings
         /// Performs internal save operations.
         /// </summary>
         /// <param name="settings">Settings to be saved.</param>
-        protected override void OnSaveSettings(IEnumerable<Setting> settings)
+        public override void OnSaveSettings(IEnumerable<Setting> settings)
         {
             using (RegistryKey registryKey = RegistryKey.CreateSubKey(SubKeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree))
             {
@@ -139,7 +138,7 @@ namespace SoftCircuits.WinSettings
         /// Performs internal load operations.
         /// </summary>
         /// <param name="settings">Settings to be loaded.</param>
-        protected override void OnLoadSettings(IEnumerable<Setting> settings)
+        public override void OnLoadSettings(IEnumerable<Setting> settings)
         {
             using (RegistryKey registryKey = RegistryKey.OpenSubKey(SubKeyPath))
             {

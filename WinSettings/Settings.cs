@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using SoftCircuits.EasyEncryption;
@@ -33,14 +33,14 @@ namespace SoftCircuits.WinSettings
         /// the derived class to save those settings in a specialized way.
         /// </summary>
         /// <param name="settings">The list of settings to be saved.</param>
-        protected abstract void OnSaveSettings(IEnumerable<Setting> settings);
+        public abstract void OnSaveSettings(IEnumerable<Setting> settings);
 
         /// <summary>
         /// Abstract method called when the settings sould be loaded. Allows
         /// the derived class to load those settings in a specialized way.
         /// </summary>
         /// <param name="settings">The list of settings to be loaded.</param>
-        protected abstract void OnLoadSettings(IEnumerable<Setting> settings);
+        public abstract void OnLoadSettings(IEnumerable<Setting> settings);
 
         /// <summary>
         /// Gets the <c>Encryption</c> instance associated with this <c>Settings</c>
@@ -50,18 +50,21 @@ namespace SoftCircuits.WinSettings
         public Encryption Encryption { get; }
 
         /// <summary>
-        /// 
+        /// Constructs a new <see cref="Settings"></see> instance.
         /// </summary>
         /// <remarks>
-        /// An exception is thrown if <paramref name="encryption"/> is null but one or more properties have the
-        /// EncryptedSetting attribute.
+        /// An exception is thrown if password is null but one or more properties have the
+        /// <see cref="EncryptedSettingAttribute"></see> attribute.
         /// </remarks>
-        /// <param name="encryption">May be null if no properties have the
-        /// <code>EncryptedSetting</code> attribute.</param>
-        public Settings(Encryption encryption)
+        /// <param name="password">Encryption password. Can be <c>null</c> if no
+        /// properties have the <see cref="EncryptedSettingAttribute"></see>
+        /// attribute.</param>
+        public Settings(string password = null)
         {
             SettingsList = BuildSettingsList();
-            Encryption = encryption;
+            Encryption = (password != null) ?
+                new Encryption(password, EncryptionAlgorithm.TripleDes) :
+                null;
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace SoftCircuits.WinSettings
                             prop.Name, prop.PropertyType.ToString()));
                     bool encrypted = Attribute.IsDefined(prop, typeof(EncryptedSettingAttribute));
                     if (encrypted && Encryption == null)
-                        throw new InvalidOperationException("Encryption cannot be null if one or more settings have the EncryptedSetting attribute.");
+                        throw new InvalidOperationException("Encryption password cannot be null if any settings have the EncryptedSetting attribute.");
                     yield return new Setting(this, prop, encrypted);
                 }
             }

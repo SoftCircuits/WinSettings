@@ -1,30 +1,28 @@
-﻿// Copyright (c) 2019 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace SoftCircuits.WinSettings
 {
     /// <summary>
-    /// Represents a single setting for a <see cref="Desktop.Settings.Settings"/>-derived class.
+    /// Represents a single setting for <see cref="Settings"></see>-derived classes.
     /// </summary>
     public class Setting
     {
-        private Settings Settings { get; }
-        private PropertyInfo PropertyInfo { get; }
-        private bool Encrypted { get; }
+        private readonly Settings Settings;
+        private readonly PropertyInfo PropertyInfo;
+        private readonly bool Encrypted;
 
         /// <summary>
-        /// Constructs a new instance of the <c>Setting</c> class.
+        /// Constructs a new instance of the <see cref="Setting"></see> class.
         /// </summary>
-        /// <param name="settings">The <see cref="Desktop.Settings.Settings"/> class that contains
+        /// <param name="settings">The <see cref="Settings"/> class that contains
         /// this property (setting).</param>
-        /// <param name="propertyInfo">The <c>PropertyInfo</c> for this
+        /// <param name="propertyInfo">The <see cref="PropertyInfo"></see> for this
         /// property.</param>
         /// <param name="encrypted">Indicates whether or not this setting is
         /// encrypted.</param>
@@ -41,7 +39,7 @@ namespace SoftCircuits.WinSettings
         public string Name => PropertyInfo.Name;
 
         /// <summary>
-        /// Gets the type of this setting
+        /// Gets the type of this setting.
         /// </summary>
         public Type Type => Encrypted ? typeof(string) : PropertyInfo.PropertyType;
 
