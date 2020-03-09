@@ -62,20 +62,21 @@ public class MySettings : IniSettings
         Created = DateTime.Now;
     }
 }
+```
 
 ## XmlSettings Class
 
-The `XmlSettings` class makes it very easy to save your application settings to an XML file.
+The <see `XmlSettings` class makes it very easy to save your application settings to an XML file.
 
-To use the class, simply derive your own settings class from `XmlSettings` and add the public properties that you want to be saved as settings. You can then call the `Settings.Load()` and `Settings.Save()` methods to read or write those settings to an XML file.
+To use the class, simply derive your own settings class from `XmlSettings` and add the public properties that you want to be saved as settings. You can then call the `Load()` and `Save()` methods to read or write those settings to an XML file.
 
 Your derived class' constructor should initialize your settings properties to their default values.
 
-Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid `Encryption` object to the `XmlSettings` constructor.
+Two attributes are available for public properties in your derived class. The first is `EncryptedSettingAttribute`. Use this attribute if you want the setting to be encrypted when saved to file. When using this attribute on any property, you must provide a valid encryption password to the `XmlSettings` constructor.
 
-The second is the `ExcludedSettingAttribute`. Use this attribute on any properties that are used internally by your code and should not saved to file.
+The second is the `ExcludedSettingAttribute` Use this attribute on any properties that are used internally by your code and should not saved to file.
 
-Note that only properties with data types supported by the `Encryption` class are supported by `XmlSettings`. This includes all the basic data types as well as `string[]` and `byte[]`. All other types will raise an exception.
+All properties without the `ExcludedSettingAttribute` attribute must be of one of the supported data types. This includes all the basic data types `string[]` and `byte[]`. All other types will raise an exception.
 
 #### Example
 
@@ -100,7 +101,7 @@ public class MySettings : XmlSettings
     public DateTime Created { get; set; }
 
     public MySettings(string filename)
-        : base(filename, new Encryption("Password", EncryptionAlgorithm.Aes))
+        : base(filename, "Password123")
     {
         // Set initial, default property values
         EmailHost = string.Empty;
