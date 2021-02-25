@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -16,12 +16,12 @@ namespace SoftCircuits.WinSettings
         /// <summary>
         /// The name of this INI setting.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// The value of this INI setting.
         /// </summary>
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 
     /// <summary>
@@ -44,6 +44,7 @@ namespace SoftCircuits.WinSettings
 
             public IniSection()
             {
+                Name = string.Empty;
                 Settings = new Dictionary<string, IniSetting>(StringComparer.OrdinalIgnoreCase);
             }
         }
@@ -61,65 +62,72 @@ namespace SoftCircuits.WinSettings
             Sections.Clear();
 
             // Default section
-            IniSection section = new IniSection { Name = DefaultSectionName };
+            IniSection? section = new IniSection { Name = DefaultSectionName };
             Sections.Add(section.Name, section);
 
-            string line;
-            using (StreamReader file = new StreamReader(filename))
+            string? line;
+            using StreamReader file = new StreamReader(filename);
+
+            while ((line = file.ReadLine()) != null)
             {
-                while ((line = file.ReadLine()) != null)
+                line = line.TrimStart();
+                if (line.Length > 0)
                 {
-                    line = line.TrimStart();
-                    if (line.Length > 0)
+                    if (line[0] == ';')
                     {
-                        if (line[0] == ';')
+                        // Ignore comments
+                    }
+                    else if (line[0] == '[')
+                    {
+                        // Parse section header
+                        int pos = line.IndexOf(']', 1);
+                        if (pos == -1)
+                            pos = line.Length;
+#if NETSTANDARD2_0
+                        string name = line.Substring(1, pos - 1).Trim();
+#else
+                        string name = line[1..pos].Trim();
+#endif
+                        if (name.Length > 0)
                         {
-                            // Ignore comments
-                        }
-                        else if (line[0] == '[')
-                        {
-                            // Parse section header
-                            int pos = line.IndexOf(']', 1);
-                            if (pos == -1)
-                                pos = line.Length;
-                            string name = line.Substring(1, pos - 1).Trim();
-                            if (name.Length > 0)
+                            if (!Sections.TryGetValue(name, out section))
                             {
-                                if (!Sections.TryGetValue(name, out section))
-                                {
-                                    section = new IniSection { Name = name };
-                                    Sections.Add(section.Name, section);
-                                }
+                                section = new IniSection { Name = name };
+                                Sections.Add(section.Name, section);
                             }
+                        }
+                    }
+                    else
+                    {
+                        // Parse setting name and value
+                        string name, value;
+
+                        int pos = line.IndexOf('=');
+                        if (pos == -1)
+                        {
+                            name = line.Trim();
+                            value = string.Empty;
                         }
                         else
                         {
-                            // Parse setting name and value
-                            string name, value;
+                            name = line.Substring(0, pos).Trim();
+#if NETSTANDARD2_0
+                            value = line.Substring(pos + 1);
+#else
+                            value = line[(pos + 1)..];
+#endif
+                        }
 
-                            int pos = line.IndexOf('=');
-                            if (pos == -1)
+                        if (name.Length > 0)
+                        {
+                            if (section.Settings.TryGetValue(name, out IniSetting? setting))
                             {
-                                name = line.Trim();
-                                value = string.Empty;
+                                setting.Value = value;
                             }
                             else
                             {
-                                name = line.Substring(0, pos).Trim();
-                                value = line.Substring(pos + 1);
-                            }
-
-                            if (name.Length > 0)
-                            {
-                                if (section.Settings.TryGetValue(name, out IniSetting setting))
-                                {
-                                    setting.Value = value;
-                                }
-                                else
-                                {
-                                    setting = new IniSetting { Name = name, Value = value };
-                                    section.Settings.Add(name, setting);
-                                }
+                                setting = new IniSetting { Name = name, Value = value };
+                                section.Settings.Add(name, setting);
                             }
                         }
                     }
@@ -133,29 +141,28 @@ namespace SoftCircuits.WinSettings
         /// <param name="filename">Path of file to write to.</param>
         public void Save(string filename)
         {
-            using (StreamWriter file = new StreamWriter(filename, false))
-            {
-                bool firstLine = true;
-                foreach (IniSection section in Sections.Values)
-                {
-                    if (firstLine)
-                        firstLine = false;
-                    else
-                        file.WriteLine();
+            using StreamWriter file = new StreamWriter(filename, false);
 
-                    if (section.Settings.Any())
-                    {
-                        file.WriteLine("[{0}]", section.Name);
-                        foreach (IniSetting setting in section.Settings.Values)
-                            file.WriteLine("{0}={1}", setting.Name, setting.Value);
-                    }
+            bool firstLine = true;
+            foreach (IniSection section in Sections.Values)
+            {
+                if (firstLine)
+                    firstLine = false;
+                else
+                    file.WriteLine();
+
+                if (section.Settings.Any())
+                {
+                    file.WriteLine("[{0}]", section.Name);
+                    foreach (IniSetting setting in section.Settings.Values)
+                        file.WriteLine("{0}={1}", setting.Name, setting.Value);
                 }
             }
         }
 
-        #endregion
+#endregion
 
-        #region Read values
+#region Read values
 
         /// <summary>
         /// Returns the value of an INI setting.
@@ -164,11 +171,11 @@ namespace SoftCircuits.WinSettings
         /// <param name="setting">The INI setting name.</param>
         /// <param name="defaultValue">The value to return if the setting was not found.</param>
         /// <returns>Returns the specified setting value.</returns>
-        public string GetSetting(string section, string setting, string defaultValue = null)
+        public string? GetSetting(string section, string setting, string? defaultValue = null)
         {
-            if (Sections.TryGetValue(section, out IniSection iniSection))
+            if (Sections.TryGetValue(section, out IniSection? iniSection))
             {
-                if (iniSection.Settings.TryGetValue(setting, out IniSetting iniSetting))
+                if (iniSection.Settings.TryGetValue(setting, out IniSetting? iniSetting))
                     return iniSetting.Value;
             }
             return defaultValue;
@@ -226,16 +233,16 @@ namespace SoftCircuits.WinSettings
         /// <returns>Returns the settings in the given INI section.</returns>
         public IEnumerable<IniSetting> GetSectionSettings(string section)
         {
-            if (Sections.TryGetValue(section, out IniSection iniSection))
+            if (Sections.TryGetValue(section, out IniSection? iniSection))
             {
                 foreach (var setting in iniSection.Settings)
                     yield return setting.Value;
             }
         }
 
-        #endregion
+#endregion
 
-        #region Write values
+#region Write values
 
         /// <summary>
         /// Sets an INI file setting. The setting is not written to disk until
@@ -246,12 +253,12 @@ namespace SoftCircuits.WinSettings
         /// <param name="value">The value of the INI-file setting</param>
         public void SetSetting(string section, string setting, string value)
         {
-            if (!Sections.TryGetValue(section, out IniSection iniSection))
+            if (!Sections.TryGetValue(section, out IniSection? iniSection))
             {
                 iniSection = new IniSection { Name = section };
                 Sections.Add(iniSection.Name, iniSection);
             }
-            if (!iniSection.Settings.TryGetValue(setting, out IniSetting iniSetting))
+            if (!iniSection.Settings.TryGetValue(setting, out IniSetting? iniSetting))
             {
                 iniSetting = new IniSetting { Name = setting };
                 iniSection.Settings.Add(iniSetting.Name, iniSetting);
@@ -292,16 +299,17 @@ namespace SoftCircuits.WinSettings
             SetSetting(section, setting, value.ToString());
         }
 
-        #endregion
+#endregion
 
-        #region Boolean parsing
+#region Boolean parsing
 
-        private string[] TrueStrings = { "true", "yes", "on" };
-        private string[] FalseStrings = { "false", "no", "off" };
+        private readonly string[] TrueStrings = { "true", "yes", "on" };
+        private readonly string[] FalseStrings = { "false", "no", "off" };
 
-        private bool ConvertToBool(string s, out bool value)
+        private bool ConvertToBool(string? s, out bool value)
         {
-
+            if (s == null)
+                value = false;
             if (TrueStrings.Any(s2 => string.Compare(s, s2, true) == 0))
                 value = true;
             else if (FalseStrings.Any(s2 => string.Compare(s, s2, true) == 0))
@@ -316,7 +324,7 @@ namespace SoftCircuits.WinSettings
             return true;
         }
 
-        #endregion
+#endregion
 
         //public void Dump()
         //{

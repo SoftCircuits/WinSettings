@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using Microsoft.Win32;
@@ -110,7 +110,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="settingsType">Section to store entries in registry.</param>
         /// <param name="password">Encryption password. May be <c>null</c> if no settings
         /// use the <see cref="EncryptedSettingAttribute" /> attribute.</param>
-        public RegistrySettings(string companyName, string applicationName, RegistrySettingsType settingsType, string password = null)
+        public RegistrySettings(string companyName, string applicationName, RegistrySettingsType settingsType, string? password = null)
             : base(password)
         {
             SubKeyPath = string.Format("Software\\{0}\\{1}", companyName, applicationName);
@@ -140,7 +140,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="settings">Settings to be loaded.</param>
         public override void OnLoadSettings(IEnumerable<Setting> settings)
         {
-            using (RegistryKey registryKey = RegistryKey.OpenSubKey(SubKeyPath))
+            using (RegistryKey? registryKey = RegistryKey.OpenSubKey(SubKeyPath))
             {
                 if (registryKey != null)
                 {

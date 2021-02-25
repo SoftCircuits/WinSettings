@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -48,7 +48,7 @@ namespace WinSettingsTests
                 settings.StringArrayValue = data.StringArrayValue;
 
                 settings.ExcludedStringValue = "Abcdefghijklmnopqrstuvwxyz";
-                Assert.AreNotEqual(null, settings.ExcludedStringValue);
+                Assert.IsNotNull(settings.ExcludedStringValue);
 
                 // Save values
                 settings.Save();

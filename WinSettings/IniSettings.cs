@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -95,7 +95,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="password">Encryption password. May be <c>null</c>
         /// if no settings use the <see cref="EncryptedSettingAttribute" />
         /// attribute.</param>
-        public IniSettings(string filename, string password = null)
+        public IniSettings(string filename, string? password = null)
             : base(password)
         {
             if (string.IsNullOrWhiteSpace(filename))
@@ -117,7 +117,7 @@ namespace SoftCircuits.WinSettings
                 // Read settings
                 foreach (Setting setting in settings)
                 {
-                    string value = iniFile.GetSetting(IniFile.DefaultSectionName, setting.Name, null);
+                    string? value = iniFile.GetSetting(IniFile.DefaultSectionName, setting.Name, null);
                     if (value != null)
                         setting.SetValueFromString(value);
                 }

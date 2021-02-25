@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using SoftCircuits.EasyEncryption;
@@ -47,7 +47,7 @@ namespace SoftCircuits.WinSettings
         /// instance.
         /// </summary>
         [ExcludedSetting]
-        public Encryption Encryption { get; }
+        public Encryption? Encryption { get; }
 
         /// <summary>
         /// Constructs a new <see cref="Settings"></see> instance.
@@ -59,7 +59,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="password">Encryption password. Can be <c>null</c> if no
         /// properties have the <see cref="EncryptedSettingAttribute"></see>
         /// attribute.</param>
-        public Settings(string password = null)
+        public Settings(string? password = null)
         {
             SettingsList = BuildSettingsList();
             Encryption = (password != null) ?

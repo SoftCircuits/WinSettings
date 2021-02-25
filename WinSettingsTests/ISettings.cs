@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -10,7 +10,7 @@ namespace WinSettingsTests
         void Save();
         void Load();
 
-        String StringValue { get; set; }
+        String? StringValue { get; set; }
         Char CharValue { get; set; }
         Boolean BooleanValue { get; set; }
         SByte SByteValue { get; set; }
@@ -25,8 +25,8 @@ namespace WinSettingsTests
         Double DoubleValue { get; set; }
         Decimal DecimalValue { get; set; }
         DateTime DateTimeValue { get; set; }
-        Byte[] ByteArrayValue { get; set; }
-        String[] StringArrayValue { get; set; }
-        String ExcludedStringValue { get; set; }
+        Byte[]? ByteArrayValue { get; set; }
+        String[]? StringArrayValue { get; set; }
+        String? ExcludedStringValue { get; set; }
     }
 }

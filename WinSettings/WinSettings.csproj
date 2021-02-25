@@ -1,29 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net5.0-windows;netstandard2.0-windows</TargetFrameworks>
+    <Nullable>annotations</Nullable>
+    <Nullable Condition="'$(TargetFramework)' == 'net5.0'">enable</Nullable>
+    <LangVersion>9.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageId>SoftCircuits.WinSettings</PackageId>
     <Authors>Jonathan Wood</Authors>
     <Company>SoftCircuits</Company>
-    <Description>.NET class library that makes it easy to save your application settings in Windows. Just create your settings class and have it derive from RegistrySettings (saves settings to the system registry), XmlSettings (saves settings to an XML file) or IniSettings (saves settings to an INI file). Just call the Save() method to save the class properties. Use the Load() method to load them. Use the [EncryptedSetting] attribute to specify a property should be stored encrypted. Use the [ExcludeSetting] to specify a property does not represent an application setting.</Description>
+    <Description>.NET class library that makes it easy to save your application settings in Windows. Just create your settings class and have it derive from RegistrySettings (saves settings to the system registry), XmlSettings (saves settings to an XML file) or IniSettings (saves settings to an INI file). Just call the Save() method to save the class properties. Use the Load() method to load them. Use the [EncryptedSetting] attribute to specify a property should be stored. Use the [ExcludeSetting] to specify that a property does not represent an application setting and should not be saved.
+
+Library now targets either .NET 5.0 or .NET Standard 2.0, and supports nullable reference types.</Description>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/SoftCircuits/WinSettings</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SoftCircuits/WinSettings</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>settings ini xml registry application-settings ini-settings xml-settings registry-settings ini-parser</PackageTags>
-    <PackageReleaseNotes>BREAKING CHANGES: Constructors for settings classes modified to now take an optional encryption password; All references to SoftCircuits.EasyEncryption now kept internal within SoftCircuits.WinSettings; Reworked unit tests; Added package icon.</PackageReleaseNotes>
+    <PackageReleaseNotes>Library now targets either .NET 5.0 or .NET Standard 2.0, and supports nullable reference types.</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Version>2.0.0</Version>
-    <Copyright>Copyright © 2019-2020 SoftCircuits</Copyright>
+    <Version>3.0.0</Version>
+    <Copyright>Copyright © 2019-2021 SoftCircuits</Copyright>
     <PackageIcon>Logo_64x64.png</PackageIcon>
     <PackageIconUrl />
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
-    <PackageReference Include="SoftCircuits.EasyEncryption" Version="1.0.3" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageReference Include="SoftCircuits.EasyEncryption" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

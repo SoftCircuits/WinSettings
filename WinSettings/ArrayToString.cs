@@ -1,6 +1,7 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -43,7 +44,7 @@ namespace SoftCircuits.WinSettings
             int pos = 0;
 
             if (s == null)
-                return new string[0];
+                return Array.Empty<string>();
 
             while (pos < s.Length)
             {

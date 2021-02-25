@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using SoftCircuits.WinSettings;
@@ -6,14 +6,14 @@ using System;
 
 namespace WinSettingsTests
 {
-    public class MyIniSettings : IniSettings, ISettings
+    public class MyRegistrySettings : RegistrySettings, ISettings
     {
-        public MyIniSettings(string filePath)
-            : base(filePath)
+        public MyRegistrySettings()
+            : base("SoftCircuits", "WinSettingsTests", RegistrySettingsType.CurrentUser)
         {
         }
 
-        public String StringValue { get; set; }
+        public String? StringValue { get; set; }
         public Char CharValue { get; set; }
         public Boolean BooleanValue { get; set; }
         public SByte SByteValue { get; set; }
@@ -28,9 +28,9 @@ namespace WinSettingsTests
         public Double DoubleValue { get; set; }
         public Decimal DecimalValue { get; set; }
         public DateTime DateTimeValue { get; set; }
-        public Byte[] ByteArrayValue { get; set; }
-        public String[] StringArrayValue { get; set; }
+        public Byte[]? ByteArrayValue { get; set; }
+        public String[]? StringArrayValue { get; set; }
         [ExcludedSetting]
-        public String ExcludedStringValue { get; set; }
+        public String? ExcludedStringValue { get; set; }
     }
 }

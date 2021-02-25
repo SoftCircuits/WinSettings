@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -47,10 +47,10 @@ namespace SoftCircuits.WinSettings
         /// Gets the value of this setting.
         /// </summary>
         /// <returns>Returns the value of this setting.</returns>
-        public object GetValue()
+        public object? GetValue()
         {
-            object value = PropertyInfo.GetValue(Settings);
-            if (value != null && Encrypted)
+            object? value = PropertyInfo.GetValue(Settings);
+            if (value != null && Encrypted && Settings.Encryption != null)
                 return Settings.Encryption.Encrypt(value);
             return value;
         }
@@ -66,11 +66,11 @@ namespace SoftCircuits.WinSettings
             {
                 try
                 {
-                    if (Encrypted)
+                    if (Encrypted && Settings.Encryption != null)
                     {
                         // Ecrypted values stored as string
-                        if (value is string)
-                            PropertyInfo.SetValue(Settings, Settings.Encryption.Decrypt(value as string, PropertyInfo.PropertyType));
+                        if (value is string s)
+                            PropertyInfo.SetValue(Settings, Settings.Encryption.Decrypt(s, PropertyInfo.PropertyType));
                     }
                     else PropertyInfo.SetValue(Settings, Convert.ChangeType(value, Type));
                 }
@@ -84,15 +84,16 @@ namespace SoftCircuits.WinSettings
         /// <returns>Returns this setting's value as a string.</returns>
         public string GetValueAsString()
         {
-            object value = GetValue();
+            object? value = GetValue();
+
             if (value == null)
                 return string.Empty;
-            else if (value is byte[])
-                return ArrayToString.Encode((value as byte[]).Select(b => b.ToString()).ToArray());
-            else if (value is string[])
-                return ArrayToString.Encode(value as string[]);
+            else if (value is byte[] byteArray)
+                return ArrayToString.Encode(byteArray.Select(b => b.ToString()).ToArray());
+            else if (value is string[] stringArray)
+                return ArrayToString.Encode(stringArray);
             else
-                return value.ToString();
+                return value?.ToString() ?? string.Empty;
         }
 
         /// <summary>

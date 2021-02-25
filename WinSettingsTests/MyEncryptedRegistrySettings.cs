@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using SoftCircuits.WinSettings;
@@ -6,15 +6,15 @@ using System;
 
 namespace WinSettingsTests
 {
-    public class MyEncryptedIniSettings : IniSettings, ISettings
+    public class MyEncryptedRegistrySettings : RegistrySettings, ISettings
     {
-        public MyEncryptedIniSettings(string filePath)
-            : base(filePath, "Password123")
+        public MyEncryptedRegistrySettings()
+            : base("SoftCircuits", "WinSettingsTestsEncrypted", RegistrySettingsType.CurrentUser, "Password123")
         {
         }
 
         [EncryptedSetting]
-        public String StringValue { get; set; }
+        public String? StringValue { get; set; }
         [EncryptedSetting]
         public Char CharValue { get; set; }
         [EncryptedSetting]
@@ -44,10 +44,10 @@ namespace WinSettingsTests
         [EncryptedSetting]
         public DateTime DateTimeValue { get; set; }
         [EncryptedSetting]
-        public Byte[] ByteArrayValue { get; set; }
+        public Byte[]? ByteArrayValue { get; set; }
         [EncryptedSetting]
-        public String[] StringArrayValue { get; set; }
+        public String[]? StringArrayValue { get; set; }
         [ExcludedSetting]
-        public String ExcludedStringValue { get; set; }
+        public String? ExcludedStringValue { get; set; }
     }
 }

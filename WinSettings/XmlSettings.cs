@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -95,7 +95,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="password">Encryption password. May be <c>null</c> if
         /// no settings use the <see cref="EncryptedSettingAttribute" />
         /// attribute.</param>
-        public XmlSettings(string filename, string password = null)
+        public XmlSettings(string filename, string? password = null)
             : base(password)
         {
             if (string.IsNullOrWhiteSpace(filename))
@@ -117,7 +117,7 @@ namespace SoftCircuits.WinSettings
                 // Read settings
                 foreach (Setting setting in settings)
                 {
-                    XmlNode node = doc.DocumentElement.SelectSingleNode(setting.Name);
+                    XmlNode? node = doc.DocumentElement?.SelectSingleNode(setting.Name);
                     if (node != null)
                         setting.SetValueFromString(node.InnerText);
                 }
@@ -132,7 +132,7 @@ namespace SoftCircuits.WinSettings
         {
             // Create settings document
             XmlDocument doc = new XmlDocument();
-            doc.AppendChild(doc.CreateNode(XmlNodeType.XmlDeclaration, null, null));
+            doc.AppendChild(doc.CreateXmlDeclaration("1.0", "UTF-8", null));
             doc.AppendChild(doc.CreateElement("Settings"));
             // Write settings
             foreach (Setting setting in settings)
@@ -142,7 +142,7 @@ namespace SoftCircuits.WinSettings
                 {
                     XmlElement element = doc.CreateElement(setting.Name);
                     element.InnerText = value;
-                    doc.DocumentElement.AppendChild(element);
+                    doc.DocumentElement!.AppendChild(element);
                 }
             }
             doc.Save(FileName);
