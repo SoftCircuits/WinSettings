@@ -4,6 +4,7 @@
 using SoftCircuits.EasyEncryption;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace SoftCircuits.WinSettings
@@ -42,6 +43,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="settings">The list of settings to be loaded.</param>
         public abstract void OnLoadSettings(IEnumerable<Setting> settings);
 
+        [Browsable(false)]
         /// <summary>
         /// Gets the <c>Encryption</c> instance associated with this <c>Settings</c>
         /// instance.
