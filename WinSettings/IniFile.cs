@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -49,7 +49,7 @@ namespace SoftCircuits.WinSettings
             }
         }
 
-        private readonly Dictionary<string, IniSection> Sections = new Dictionary<string, IniSection>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, IniSection> Sections = new(StringComparer.OrdinalIgnoreCase);
 
         #region File functions
 
@@ -62,11 +62,11 @@ namespace SoftCircuits.WinSettings
             Sections.Clear();
 
             // Default section
-            IniSection? section = new IniSection { Name = DefaultSectionName };
+            IniSection? section = new() { Name = DefaultSectionName };
             Sections.Add(section.Name, section);
 
             string? line;
-            using StreamReader file = new StreamReader(filename);
+            using StreamReader file = new(filename);
 
             while ((line = file.ReadLine()) != null)
             {
@@ -83,7 +83,7 @@ namespace SoftCircuits.WinSettings
                         int pos = line.IndexOf(']', 1);
                         if (pos == -1)
                             pos = line.Length;
-#if NETSTANDARD2_0
+#if NETSTANDARD
                         string name = line.Substring(1, pos - 1).Trim();
 #else
                         string name = line[1..pos].Trim();
@@ -110,10 +110,11 @@ namespace SoftCircuits.WinSettings
                         }
                         else
                         {
+#if NETSTANDARD
                             name = line.Substring(0, pos).Trim();
-#if NETSTANDARD2_0
                             value = line.Substring(pos + 1);
 #else
+                            name = line[..pos].Trim();
                             value = line[(pos + 1)..];
 #endif
                         }
@@ -141,7 +142,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="filename">Path of file to write to.</param>
         public void Save(string filename)
         {
-            using StreamWriter file = new StreamWriter(filename, false);
+            using StreamWriter file = new(filename, false);
 
             bool firstLine = true;
             foreach (IniSection section in Sections.Values)
@@ -160,9 +161,9 @@ namespace SoftCircuits.WinSettings
             }
         }
 
-#endregion
+        #endregion
 
-#region Read values
+        #region Read values
 
         /// <summary>
         /// Returns the value of an INI setting.
@@ -240,9 +241,9 @@ namespace SoftCircuits.WinSettings
             }
         }
 
-#endregion
+        #endregion
 
-#region Write values
+        #region Write values
 
         /// <summary>
         /// Sets an INI file setting. The setting is not written to disk until
@@ -299,9 +300,9 @@ namespace SoftCircuits.WinSettings
             SetSetting(section, setting, value.ToString());
         }
 
-#endregion
+        #endregion
 
-#region Boolean parsing
+        #region Boolean parsing
 
         private readonly string[] TrueStrings = { "true", "yes", "on" };
         private readonly string[] FalseStrings = { "false", "no", "off" };
@@ -324,7 +325,7 @@ namespace SoftCircuits.WinSettings
             return true;
         }
 
-#endregion
+        #endregion
 
         //public void Dump()
         //{

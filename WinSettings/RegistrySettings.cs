@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using Microsoft.Win32;
@@ -143,7 +143,7 @@ namespace SoftCircuits.WinSettings
             {
                 foreach (var setting in settings)
                 {
-                    object value = registryKey.GetValue(setting.Name);
+                    object? value = registryKey.GetValue(setting.Name);
                     if (value != null)
                         setting.SetValue(value);
                 }

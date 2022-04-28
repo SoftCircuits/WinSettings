@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -51,11 +51,12 @@ namespace SoftCircuits.WinSettings
         {
             object? value = PropertyInfo.GetValue(Settings);
 
-            if (PropertyInfo.PropertyType.IsEnum)
-                value = value.ToString(); // Convert.ChangeType(value, typeof(int));
+            if (PropertyInfo.PropertyType.IsEnum && value != null)
+                value = value.ToString();
 
-            if (value != null && Encrypted && Settings.Encryption != null)
+            if (Encrypted && Settings.Encryption != null && value != null)
                 return Settings.Encryption.Encrypt(value);
+
             return value;
         }
 
@@ -65,7 +66,7 @@ namespace SoftCircuits.WinSettings
         /// <param name="value">The value this setting should be set to.</param>
         public void SetValue(object value)
         {
-            // Leave property value unmodified if no value or error
+            // Leave property value unmodified when no value or error
             if (value != null)
             {
                 try
@@ -73,28 +74,13 @@ namespace SoftCircuits.WinSettings
                     Type type = PropertyInfo.PropertyType;
                     bool isEnum = type.IsEnum;
 
-                    if (Encrypted && Settings.Encryption != null)
-                    {
-                        // Ecrypted values stored as string
-                        if (value is string s)
-                            value = Settings.Encryption.Decrypt(s, isEnum ? typeof(string) : type);
-                    }
+                    if (Encrypted && Settings.Encryption != null && value is string s)
+                        value = Settings.Encryption.Decrypt(s, isEnum ? typeof(string) : type);
 
                     if (isEnum && value is string s2)
                         value = Enum.Parse(type, s2);
 
                     PropertyInfo.SetValue(Settings, Convert.ChangeType(value, type));
-
-
-
-
-                    //if (Encrypted && Settings.Encryption != null)
-                    //{
-                    //    // Ecrypted values stored as string
-                    //    if (value is string s)
-                    //        PropertyInfo.SetValue(Settings, Settings.Encryption.Decrypt(s, PropertyInfo.PropertyType));
-                    //}
-                    //else PropertyInfo.SetValue(Settings, Convert.ChangeType(value, Type));
                 }
                 catch (Exception) { Debug.Assert(false); }
             }

@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
+// Copyright (c) 2019-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -104,6 +104,7 @@ namespace WinSettingsTests
                 Assert.AreEqual(data.DateTimeValue.Second, settings.DateTimeValue.Second);
                 CollectionAssert.AreEqual(data.ByteArrayValue, settings.ByteArrayValue);
                 CollectionAssert.AreEqual(data.StringArrayValue, settings.StringArrayValue);
+                Assert.AreEqual(data.TestEnumValue, settings.TestEnumValue);
 
                 // Test excluded property is not saved/loaded
                 Assert.AreEqual(null, settings.ExcludedStringValue);

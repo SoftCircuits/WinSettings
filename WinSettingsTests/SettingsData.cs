@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -41,8 +41,8 @@ namespace WinSettingsTests
                 UInt32Value = UInt32.MinValue,
                 Int64Value = Int64.MinValue,
                 UInt64Value = UInt64.MinValue,
-                SingleValue = 0,    // Single.MinValue, TODO: Bug fixed in .NET Core 3.0
-                DoubleValue = 0,    // Double.MinValue + 1, TODO: Bug fixed in .NET Core 3.0
+                SingleValue = Single.MinValue,
+                DoubleValue = Double.MinValue,
                 DecimalValue = Decimal.MinValue,
                 DateTimeValue = DateTime.MinValue,
                 ByteArrayValue = Array.Empty<byte>(),
@@ -62,8 +62,8 @@ namespace WinSettingsTests
                 UInt32Value = UInt32.MaxValue,
                 Int64Value = Int64.MaxValue,
                 UInt64Value = UInt64.MaxValue,
-                SingleValue = 0,    // Single.MaxValue, TODO: Bug fixed in .NET Core 3.0
-                DoubleValue = 0,    // Double.MaxValue, TODO: Bug fixed in .NET Core 3.0
+                SingleValue = Single.MaxValue,
+                DoubleValue = Double.MaxValue,
                 DecimalValue = Decimal.MaxValue,
                 DateTimeValue = DateTime.MaxValue,
                 ByteArrayValue = new Byte[]

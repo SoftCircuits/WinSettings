@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2021 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2019-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -16,7 +16,7 @@ namespace SoftCircuits.WinSettings
         /// <returns>The encoded string.</returns>
         public static string Encode(string[] array)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
 
             if (array == null)
                 return string.Empty;
@@ -40,7 +40,7 @@ namespace SoftCircuits.WinSettings
         /// <returns>The decoded array.</returns>
         public static string[] Decode(string s)
         {
-            List<string> list = new List<string>();
+            List<string> list = new();
             int pos = 0;
 
             if (s == null)
@@ -51,7 +51,7 @@ namespace SoftCircuits.WinSettings
                 if (s[pos] == '\"')
                 {
                     // Parse quoted value
-                    StringBuilder builder = new StringBuilder();
+                    StringBuilder builder = new();
 
                     // Skip starting quote
                     pos++;
@@ -82,7 +82,11 @@ namespace SoftCircuits.WinSettings
                     pos = s.IndexOf(',', pos);
                     if (pos == -1)
                         pos = s.Length;
+#if NETSTANDARD
                     list.Add(s.Substring(start, pos - start));
+#else
+                    list.Add(s[start..pos]);
+#endif
                     // Skip delimiter
                     pos++;
                 }
