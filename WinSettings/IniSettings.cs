@@ -112,7 +112,7 @@ namespace SoftCircuits.WinSettings
             if (File.Exists(FileName))
             {
                 // Load INI file
-                IniFile iniFile = new IniFile();
+                IniFile iniFile = new();
                 iniFile.Load(FileName);
                 // Read settings
                 foreach (Setting setting in settings)
@@ -131,7 +131,7 @@ namespace SoftCircuits.WinSettings
         public override void OnSaveSettings(IEnumerable<Setting> settings)
         {
             // Create INI file
-            IniFile iniFile = new IniFile();
+            IniFile iniFile = new();
             // Write settings
             foreach (Setting setting in settings)
             {

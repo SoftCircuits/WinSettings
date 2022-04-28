@@ -27,6 +27,7 @@ namespace WinSettingsTests
         DateTime DateTimeValue { get; set; }
         Byte[]? ByteArrayValue { get; set; }
         String[]? StringArrayValue { get; set; }
+        TestEnum TestEnumValue { get; set; }
         String? ExcludedStringValue { get; set; }
     }
 }

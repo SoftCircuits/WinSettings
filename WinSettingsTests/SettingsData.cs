@@ -24,6 +24,7 @@ namespace WinSettingsTests
         public DateTime DateTimeValue { get; set; }
         public Byte[]? ByteArrayValue { get; set; }
         public String[]? StringArrayValue { get; set; }
+        public TestEnum TestEnumValue { get; set; }
 
         public static readonly SettingsData[] TestData =
         {
@@ -44,8 +45,9 @@ namespace WinSettingsTests
                 DoubleValue = 0,    // Double.MinValue + 1, TODO: Bug fixed in .NET Core 3.0
                 DecimalValue = Decimal.MinValue,
                 DateTimeValue = DateTime.MinValue,
-                ByteArrayValue = new Byte[] { },
-                StringArrayValue = new String[] { },
+                ByteArrayValue = Array.Empty<byte>(),
+                StringArrayValue = Array.Empty<string>(),
+                TestEnumValue = TestEnum.First,
             },
             new SettingsData    // Max values
             {
@@ -78,6 +80,7 @@ namespace WinSettingsTests
                     "Abcdefghijklmnopqrstuvwxyz1234567890",
                     "0987654321zyxwvutsrqponmlkjihgfedcbA",
                 },
+                TestEnumValue = TestEnum.Second,
             },
             new SettingsData    // Zeros and empty
             {
@@ -96,8 +99,9 @@ namespace WinSettingsTests
                 DoubleValue = 0,
                 DecimalValue = 0,
                 DateTimeValue = DateTime.MinValue,
-                ByteArrayValue = new Byte[] { },
-                StringArrayValue = new String[] { },
+                ByteArrayValue = Array.Empty<byte>(),
+                StringArrayValue = Array.Empty<string>(),
+                TestEnumValue = TestEnum.Third,
             },
             new SettingsData    // Random
             {
@@ -132,6 +136,7 @@ namespace WinSettingsTests
                     "jk\tl",
                     "m n o"
                 },
+                TestEnumValue = TestEnum.Fourth,
             },
             new SettingsData    // Random 2
             {
@@ -166,6 +171,7 @@ namespace WinSettingsTests
                     "Four",
                     "Five"
                 },
+                TestEnumValue = TestEnum.Fifth,
             },
         };
     }

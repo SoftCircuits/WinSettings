@@ -93,14 +93,19 @@ namespace SoftCircuits.WinSettings
                 // Ignore properties with ExcludedSetting attribute
                 if (!Attribute.IsDefined(prop, typeof(ExcludedSettingAttribute)))
                 {
-                    // Test for supported data type (same types as for Encryption class)
-                    if (!Encryption.IsTypeSupported(prop.PropertyType))
+                    if (Encryption.IsTypeSupported(prop.PropertyType) || prop.PropertyType.IsEnum)
+                    {
+                        bool encrypted = Attribute.IsDefined(prop, typeof(EncryptedSettingAttribute));
+                        if (encrypted && Encryption == null)
+                            throw new InvalidOperationException("Encryption password cannot be null if any settings have the EncryptedSetting attribute.");
+                        yield return new Setting(this, prop, encrypted);
+                    }
+                    else
+                    {
+                        // Unsupported data type
                         throw new Exception(string.Format("Settings property '{0}' is an unsupported data type '{1}'. Change property type or use ExcludedSetting attribute.",
                             prop.Name, prop.PropertyType.ToString()));
-                    bool encrypted = Attribute.IsDefined(prop, typeof(EncryptedSettingAttribute));
-                    if (encrypted && Encryption == null)
-                        throw new InvalidOperationException("Encryption password cannot be null if any settings have the EncryptedSetting attribute.");
-                    yield return new Setting(this, prop, encrypted);
+                    }
                 }
             }
         }

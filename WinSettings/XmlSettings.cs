@@ -112,7 +112,7 @@ namespace SoftCircuits.WinSettings
             if (File.Exists(FileName))
             {
                 // Load XML document
-                XmlDocument doc = new XmlDocument();
+                XmlDocument doc = new();
                 doc.Load(FileName);
                 // Read settings
                 foreach (Setting setting in settings)
@@ -131,7 +131,7 @@ namespace SoftCircuits.WinSettings
         public override void OnSaveSettings(IEnumerable<Setting> settings)
         {
             // Create settings document
-            XmlDocument doc = new XmlDocument();
+            XmlDocument doc = new();
             doc.AppendChild(doc.CreateXmlDeclaration("1.0", "UTF-8", null));
             doc.AppendChild(doc.CreateElement("Settings"));
             // Write settings

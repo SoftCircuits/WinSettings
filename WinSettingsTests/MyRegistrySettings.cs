@@ -30,6 +30,7 @@ namespace WinSettingsTests
         public DateTime DateTimeValue { get; set; }
         public Byte[]? ByteArrayValue { get; set; }
         public String[]? StringArrayValue { get; set; }
+        public TestEnum TestEnumValue { get; set; }
         [ExcludedSetting]
         public String? ExcludedStringValue { get; set; }
     }

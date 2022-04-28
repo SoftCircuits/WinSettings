@@ -47,6 +47,9 @@ namespace WinSettingsTests
         public Byte[]? ByteArrayValue { get; set; }
         [EncryptedSetting]
         public String[]? StringArrayValue { get; set; }
+        [EncryptedSetting]
+        public TestEnum TestEnumValue { get; set; }
+
         [ExcludedSetting]
         public String? ExcludedStringValue { get; set; }
     }

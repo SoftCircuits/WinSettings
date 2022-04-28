@@ -50,6 +50,10 @@ namespace SoftCircuits.WinSettings
         public object? GetValue()
         {
             object? value = PropertyInfo.GetValue(Settings);
+
+            if (PropertyInfo.PropertyType.IsEnum)
+                value = value.ToString(); // Convert.ChangeType(value, typeof(int));
+
             if (value != null && Encrypted && Settings.Encryption != null)
                 return Settings.Encryption.Encrypt(value);
             return value;
@@ -66,13 +70,31 @@ namespace SoftCircuits.WinSettings
             {
                 try
                 {
+                    Type type = PropertyInfo.PropertyType;
+                    bool isEnum = type.IsEnum;
+
                     if (Encrypted && Settings.Encryption != null)
                     {
                         // Ecrypted values stored as string
                         if (value is string s)
-                            PropertyInfo.SetValue(Settings, Settings.Encryption.Decrypt(s, PropertyInfo.PropertyType));
+                            value = Settings.Encryption.Decrypt(s, isEnum ? typeof(string) : type);
                     }
-                    else PropertyInfo.SetValue(Settings, Convert.ChangeType(value, Type));
+
+                    if (isEnum && value is string s2)
+                        value = Enum.Parse(type, s2);
+
+                    PropertyInfo.SetValue(Settings, Convert.ChangeType(value, type));
+
+
+
+
+                    //if (Encrypted && Settings.Encryption != null)
+                    //{
+                    //    // Ecrypted values stored as string
+                    //    if (value is string s)
+                    //        PropertyInfo.SetValue(Settings, Settings.Encryption.Decrypt(s, PropertyInfo.PropertyType));
+                    //}
+                    //else PropertyInfo.SetValue(Settings, Convert.ChangeType(value, Type));
                 }
                 catch (Exception) { Debug.Assert(false); }
             }

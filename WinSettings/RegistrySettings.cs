@@ -123,14 +123,12 @@ namespace SoftCircuits.WinSettings
         /// <param name="settings">Settings to be saved.</param>
         public override void OnSaveSettings(IEnumerable<Setting> settings)
         {
-            using (RegistryKey registryKey = RegistryKey.CreateSubKey(SubKeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            using RegistryKey registryKey = RegistryKey.CreateSubKey(SubKeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+            foreach (var setting in settings)
             {
-                foreach (var setting in settings)
-                {
-                    var value = setting.GetValue();
-                    if (value != null)
-                        registryKey.SetValue(setting.Name, value);
-                }
+                var value = setting.GetValue();
+                if (value != null)
+                    registryKey.SetValue(setting.Name, value);
             }
         }
 
@@ -140,16 +138,14 @@ namespace SoftCircuits.WinSettings
         /// <param name="settings">Settings to be loaded.</param>
         public override void OnLoadSettings(IEnumerable<Setting> settings)
         {
-            using (RegistryKey? registryKey = RegistryKey.OpenSubKey(SubKeyPath))
+            using RegistryKey? registryKey = RegistryKey.OpenSubKey(SubKeyPath);
+            if (registryKey != null)
             {
-                if (registryKey != null)
+                foreach (var setting in settings)
                 {
-                    foreach (var setting in settings)
-                    {
-                        object value = registryKey.GetValue(setting.Name);
-                        if (value != null)
-                            setting.SetValue(value);
-                    }
+                    object value = registryKey.GetValue(setting.Name);
+                    if (value != null)
+                        setting.SetValue(value);
                 }
             }
         }

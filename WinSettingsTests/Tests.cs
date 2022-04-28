@@ -24,7 +24,7 @@ namespace WinSettingsTests
             File.Delete(path);
         }
 
-        private void Test(ISettings settings)
+        private static void Test(ISettings settings)
         {
             foreach (SettingsData data in SettingsData.TestData)
             {
@@ -46,6 +46,7 @@ namespace WinSettingsTests
                 settings.DateTimeValue = data.DateTimeValue;
                 settings.ByteArrayValue = data.ByteArrayValue;
                 settings.StringArrayValue = data.StringArrayValue;
+                settings.TestEnumValue = data.TestEnumValue;
 
                 settings.ExcludedStringValue = "Abcdefghijklmnopqrstuvwxyz";
                 Assert.IsNotNull(settings.ExcludedStringValue);
@@ -71,6 +72,7 @@ namespace WinSettingsTests
                 settings.DateTimeValue = default;
                 settings.ByteArrayValue = default;
                 settings.StringArrayValue = default;
+                settings.TestEnumValue = default;
 
                 settings.ExcludedStringValue = default;
                 Assert.AreEqual(null, settings.ExcludedStringValue);
